@@ -1,5 +1,7 @@
 const express = require('express');
 const cors = require('cors');
+const path = require('path');
+const fs = require('fs');
 require('dotenv').config();
 
 const authRoutes = require('./routes/authRoutes');
@@ -10,7 +12,7 @@ const paymentRoutes = require('./routes/paymentRoutes');
 const reviewRoutes = require('./routes/reviewRoutes');
 const budgetRoutes = require('./routes/budgetRoutes');
 const smartMatchRoutes = require('./routes/smartMatchRoutes');
-const { notFoundHandler, errorHandler } = require('./middleware/errorHandler');
+const { errorHandler } = require('./middleware/errorHandler');
 
 const app = express();
 
@@ -39,8 +41,31 @@ app.use('/api/reviews', reviewRoutes);
 app.use('/api/budget', budgetRoutes);
 app.use('/api/smart-match', smartMatchRoutes);
 
+// Static assets & SPA client fallback for unified production deployment
+const clientDistPath = path.join(__dirname, '../client/dist');
+if (fs.existsSync(clientDistPath)) {
+  app.use(express.static(clientDistPath));
+
+  // SPA fallback for all non-API routes
+  app.get('*', (req, res, next) => {
+    if (req.path.startsWith('/api')) {
+      return res.status(404).json({
+        success: false,
+        message: `API endpoint not found: ${req.method} ${req.originalUrl}`
+      });
+    }
+    res.sendFile(path.join(clientDistPath, 'index.html'));
+  });
+} else {
+  app.use((req, res) => {
+    res.status(404).json({
+      success: false,
+      message: `API endpoint not found: ${req.method} ${req.originalUrl}`
+    });
+  });
+}
+
 // Error handling
-app.use(notFoundHandler);
 app.use(errorHandler);
 
 module.exports = app;
