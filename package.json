@@ -1,0 +1,14 @@
+{
+  "name": "eventhub",
+  "version": "1.0.0",
+  "description": "EventHub — Plan Smart. Spend Smart. Celebrate Better.",
+  "scripts": {
+    "install:all": "npm --prefix server install && npm --prefix client install",
+    "server": "npm --prefix server start",
+    "client": "npm --prefix client dev",
+    "build:client": "npm --prefix client build"
+  },
+  "keywords": ["event-planner", "budget-management", "tier-2-tier-3", "hackathon", "react", "nodejs", "mysql"],
+  "author": "Tech Squad",
+  "license": "MIT"
+}
