@@ -4,9 +4,10 @@
   "description": "EventHub — Plan Smart. Spend Smart. Celebrate Better.",
   "scripts": {
     "install:all": "npm --prefix server install && npm --prefix client install",
-    "build:client": "npm --prefix client build",
+    "build:client": "npm --prefix client run build",
     "server": "npm --prefix server start",
-    "client": "npm --prefix client dev",
+    "client": "npm --prefix client run dev",
+    "dev": "npm --prefix client run dev",
     "start": "npm --prefix server start",
     "build": "npm run install:all && npm run build:client"
   },
